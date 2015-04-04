@@ -1,6 +1,10 @@
 package com.resthunter;
 
+import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.ColorMatrixColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -13,6 +17,7 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.melnykov.fab.FloatingActionButton;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.resthunter.SlidingUpWidget.BaseActivity;
@@ -38,12 +43,17 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
     private int mToolbarColor;
     private boolean mFabIsShown;
 
+    private String name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+
+        Intent intent = getIntent();
+        name = intent.getStringExtra("Name");
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_image);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
@@ -62,9 +72,10 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
         mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText(getTitle());
+        mTitleView.setText(name);
         setTitle(null);
         mFab = findViewById(R.id.fab);
+        setColorFab();
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,12 +125,19 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
 
         // Translate title text
         int maxTitleTranslationY = (int) (mFlexibleSpaceImageHeight - mTitleView.getHeight() * scale);
+        int maxTitleTranslationX = 20;
         int titleTranslationY = maxTitleTranslationY - scrollY;
+        int titleTranslationX;
+        if(scrollY <=277) {
+            titleTranslationX = maxTitleTranslationX + (int) ((float) scrollY / 7);
+        } else
+            titleTranslationX = 59;
         if (TOOLBAR_IS_STICKY) {
             titleTranslationY = Math.max(0, titleTranslationY);
+            titleTranslationX = Math.max(0, titleTranslationX);
         }
         ViewHelper.setTranslationY(mTitleView, titleTranslationY);
-        ViewHelper.setTranslationX(mTitleView, 50);
+        ViewHelper.setTranslationX(mTitleView, titleTranslationX);
 
         // Translate FAB
         int maxFabTranslationY = mFlexibleSpaceImageHeight - mFab.getHeight() / 2;
@@ -139,12 +157,10 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
             ViewHelper.setTranslationY(mFab, fabTranslationY);
         }
 
+        setFabAlpha((int) ViewHelper.getTranslationY(mFab));
         // Show/hide FAB
-        if (fabTranslationY < mFlexibleSpaceShowFabOffset) {
-            hideFab();
-        } else {
+
             showFab();
-        }
 
         if (TOOLBAR_IS_STICKY) {
             // Change alpha of toolbar background
@@ -179,11 +195,41 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         }
     }
 
-    private void hideFab() {
-        if (mFabIsShown) {
-            ViewPropertyAnimator.animate(mFab).cancel();
-            ViewPropertyAnimator.animate(mFab).scaleX(0).scaleY(0).setDuration(200).start();
-            mFabIsShown = false;
+
+    private void setFabAlpha(int scroll) {
+        float opacityRange = (float)1/(314 - 38)*(scroll-38);
+        mFab.setAlpha(opacityRange);
+        if(opacityRange < 0.05) {
+            mFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {}
+            });
+        } else {
+            mFab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(), "Favourite", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
+    }
+
+    private void setColorFab() {
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_local_restaurant_grey600_24dp);
+
+        int iColor = Color.parseColor(getResources().getString(R.color.material_orange_500));
+
+        int red = (iColor & 0xFF0000) / 0xFFFF;
+        int green = (iColor & 0xFF00) / 0xFF;
+        int blue = iColor & 0xFF;
+
+        float[] matrix = { 0, 0, 0, 0, red
+                , 0, 0, 0, 0, green
+                , 0, 0, 0, 0, blue
+                , 0, 0, 0, 1, 0 };
+        ColorFilter colorFilter = new ColorMatrixColorFilter(matrix);
+        drawable.setColorFilter(colorFilter);
+
+        ((FloatingActionButton) mFab).setImageDrawable(drawable);
     }
 }

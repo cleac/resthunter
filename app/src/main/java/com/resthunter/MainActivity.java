@@ -80,7 +80,9 @@ public class MainActivity extends SlidingUpBaseActivity<ObservableRecyclerView> 
             }
 
             private void click(int i) {
-                context.startActivity(new Intent(context, RestaurantActivity.class));
+                Intent intent = new Intent(context, RestaurantActivity.class);
+                intent.putExtra("Name", "MAFIA");
+                context.startActivity(intent);
             }
         }
     }

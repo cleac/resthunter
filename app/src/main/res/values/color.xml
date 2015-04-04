@@ -7,6 +7,7 @@
     <color name="accentLight">#F4FF81</color>
 
     <color name="white">#ffffff</color>
+    <color name="grey">#E0E0E0</color>
 
     <!--Material orange colors-->
     <color name = "material_orange_300">#FFB74D</color>
@@ -14,6 +15,10 @@
     <color name = "material_orange_500">#FF9800</color>
     <color name = "material_orange_600">#FB8C00</color>
     <color name = "material_orange_700">#F57C00</color>
+
+    <!--Material green colors-->
+    <color name = "material_green_500">#4CAF50</color>
+    <color name = "material_light_green_500">#8BC34A</color>
 
 
 

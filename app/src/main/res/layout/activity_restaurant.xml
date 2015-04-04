@@ -33,18 +33,113 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/flexible_image"
                 android:background="@android:color/transparent" />
-
-            <View
+            <RelativeLayout
+                android:layout_height="150dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@android:color/transparent" />
+                android:background="@color/material_orange_500">
+
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/callImageView"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/ic_call_black_24dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true" />
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/wifiImageView"
+                    android:layout_marginLeft="24dp"
+                    android:background="@drawable/ic_signal_wifi_4_bar_grey600_24dp"
+                    android:layout_alignTop="@+id/callImageView"
+                    android:layout_toRightOf="@+id/callImageView"
+                    android:layout_toEndOf="@+id/callImageView" />
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/cardImageView"
+                    android:background="@drawable/ic_credit_card_grey600_24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_alignTop="@+id/wifiImageView"
+                    android:layout_toRightOf="@+id/wifiImageView"
+                    android:layout_toEndOf="@+id/wifiImageView" />
+
+                <ImageView
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:id="@+id/timeImageView"
+                    android:background="@drawable/ic_timer_grey600_24dp"
+                    android:layout_marginLeft="24dp"
+                    android:layout_alignTop="@+id/cardImageView"
+                    android:layout_toRightOf="@+id/cardImageView"
+                    android:layout_toEndOf="@+id/cardImageView" />
+
+                <RelativeLayout
+                    android:layout_height="50dp"
+                    android:layout_width="80dp"
+                    android:id="@+id/rating"
+                    android:background="@drawable/rating"
+                    android:layout_below="@+id/callImageView"
+                    android:layout_alignLeft="@+id/callImageView"
+                    android:layout_alignStart="@+id/callImageView"
+                    android:layout_marginTop="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10"
+                        android:textSize="16dp"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:textColor="@color/white"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
+                        android:id="@+id/textView" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="/"
+                        android:textSize="24dp"
+                        android:textColor="@color/white"
+                        android:id="@+id/textView2"
+                        android:layout_alignTop="@+id/textView"
+                        android:layout_toRightOf="@+id/textView3"
+                        android:layout_toEndOf="@+id/textView3" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="9.2"
+                        android:textSize="24dp"
+                        android:textColor="@color/white"
+                        android:id="@+id/textView3"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/textView"
+                        android:layout_toStartOf="@+id/textView" />
+
+                    </RelativeLayout>
 
             <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_height="50dp"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="@color/material_orange_500">
+                android:id="@+id/friends"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/material_orange_500"
+                android:layout_alignTop="@+id/rating"
+                android:layout_toRightOf="@+id/rating"
+                android:layout_toEndOf="@+id/rating">
+
+                </RelativeLayout>
             </RelativeLayout>
 
             <TextView
@@ -56,8 +151,6 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:paddingTop="@dimen/activity_vertical_margin"
                 android:text="@string/lorem" />
-
-
         </LinearLayout>
     </com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
@@ -87,8 +180,11 @@
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/flexible_image"
+            android:background="@android:color/transparent" />
     </LinearLayout>
-
 
     <com.melnykov.fab.FloatingActionButton
         android:id="@+id/fab"
@@ -96,7 +192,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="left|top"
         android:scaleType="center"
-        app:fab_colorNormal="@color/accentLight"
-        app:fab_colorPressed="@color/white" />
-
+        android:background="@drawable/ic_local_restaurant"
+        app:fab_colorNormal="@color/white"
+        app:fab_colorPressed="@color/grey" />
 </FrameLayout>
