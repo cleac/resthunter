@@ -1,4 +1,4 @@
-package com.resthunter;
+package com.resthunter.SlidingUpWidget;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,11 +11,16 @@ import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.resthunter.SlidingUpWidget.SlidingUpBaseActivity;
+import com.resthunter.R;
 
 import java.util.ArrayList;
 
-public class MainActivity extends SlidingUpBaseActivity<ObservableRecyclerView> implements ObservableScrollViewCallbacks {
+/**
+ * Created by denys on 4/4/15.
+ */
+
+
+public class SlidingUpRecyclerView extends SlidingUpBaseActivity<ObservableRecyclerView> implements ObservableScrollViewCallbacks {
 
     @Override
     protected int getLayoutResId() {
