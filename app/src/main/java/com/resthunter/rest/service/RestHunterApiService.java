@@ -21,6 +21,25 @@ import retrofit.http.Path;
 public interface RestHunterApiService {
 
     @GET("/api/dish?format=json")
+    public ArrayList<Dish> getDishList();
+
+    @GET("/api/ingredient?format=json")
+    public ArrayList<Ingredient> getIngredientList();
+
+    @GET("/api/menu?format=json")
+    public ArrayList<MenuEntry> getMenu();
+
+    @GET("/api/category?forman=json")
+    public ArrayList<Category> getCategoryList();
+
+    @GET("/api/restaurant?format=json")
+    public ArrayList<Restaurant> getRestaurantList();
+
+    @GET("/api/place?format=json")
+    public ArrayList<Place> getPlaceList();
+
+
+    @GET("/api/dish?format=json")
     public void getDishList(retrofit.Callback<ArrayList<Dish>> callback);
 
     @GET("/api/ingredient?format=json")
