@@ -6,18 +6,23 @@ package com.resthunter.SlidingUpWidget;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.resthunter.R;
+import com.resthunter.Restaurant;
 
 import java.util.ArrayList;
 
 public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAdapter.ViewHolder> {
     private LayoutInflater mInflater;
-    private ArrayList<String> mItems;
+    private ArrayList<Restaurant> mItems;
 
-    public SimpleRecyclerAdapter(Context context, ArrayList<String> items) {
+    public SimpleRecyclerAdapter(Context context, ArrayList<Restaurant> items) {
         mInflater = LayoutInflater.from(context);
         mItems = items;
     }
@@ -29,20 +34,23 @@ public class SimpleRecyclerAdapter extends RecyclerView.Adapter<SimpleRecyclerAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(mInflater.inflate(android.R.layout.simple_list_item_1, parent, false));
+        return new ViewHolder(mInflater.inflate(R.layout.restaurant_item, parent, false));
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        viewHolder.textView.setText(mItems.get(position));
+        viewHolder.mRestaurantName.setText(mItems.get(position).getRestaurantName());
+        viewHolder.mRestaurantImage.setImageDrawable(mItems.get(position).getRestaurantImage());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView mRestaurantName;
+        ImageView mRestaurantImage;
 
         public ViewHolder(View view) {
             super(view);
-            textView = (TextView) view.findViewById(android.R.id.text1);
+            mRestaurantName = (TextView) view.findViewById(R.id.restaurant_name);
+            mRestaurantImage = (ImageView) view.findViewById(R.id.restaurant_image);
         }
     }
 }
