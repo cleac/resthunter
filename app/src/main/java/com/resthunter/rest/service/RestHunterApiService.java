@@ -4,6 +4,7 @@ import com.resthunter.rest.model.Category;
 import com.resthunter.rest.model.Dish;
 import com.resthunter.rest.model.Ingredient;
 import com.resthunter.rest.model.MenuEntry;
+import com.resthunter.rest.model.Place;
 import com.resthunter.rest.model.Restaurant;
 
 import java.util.ArrayList;
@@ -20,6 +21,25 @@ import retrofit.http.Path;
 public interface RestHunterApiService {
 
     @GET("/api/dish?format=json")
+    public ArrayList<Dish> getDishList();
+
+    @GET("/api/ingredient?format=json")
+    public ArrayList<Ingredient> getIngredientList();
+
+    @GET("/api/menu?format=json")
+    public ArrayList<MenuEntry> getMenu();
+
+    @GET("/api/category?forman=json")
+    public ArrayList<Category> getCategoryList();
+
+    @GET("/api/restaurant?format=json")
+    public ArrayList<Restaurant> getRestaurantList();
+
+    @GET("/api/place?format=json")
+    public ArrayList<Place> getPlaceList();
+
+
+    @GET("/api/dish?format=json")
     public void getDishList(retrofit.Callback<ArrayList<Dish>> callback);
 
     @GET("/api/ingredient?format=json")
@@ -33,6 +53,9 @@ public interface RestHunterApiService {
 
     @GET("/api/restaurant?format=json")
     public void getRestaurantList(retrofit.Callback<ArrayList<Restaurant>> callback);
+
+    @GET("/api/place?format=json")
+    public void getPlaceList(retrofit.Callback<ArrayList<Place>> callback);
 
 
     @GET("/api/dish?format=json&ordering={field}")
@@ -49,4 +72,7 @@ public interface RestHunterApiService {
 
     @GET("/api/restaurant?format=json&ordering={field}")
     public void getRestaurantList(@Path("field") String field,retrofit.Callback<ArrayList<Restaurant>> callback);
+
+    @GET("/api/place?format=json&ordering={field}")
+    public void getPlaceList(@Path("field") String field,retrofit.Callback<ArrayList<Place>> callback);
 }

@@ -13,6 +13,8 @@ public class Restaurant {
     @Expose
     private String image;
     @Expose
+    private String interior;
+    @Expose
     private String address;
     @SerializedName("coord_n")
     @Expose
@@ -24,126 +26,144 @@ public class Restaurant {
     private String rate;
 
     /**
-     * 
+     *
      * @return
-     *     The id
+     * The id
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 
+     *
      * @param id
-     *     The id
+     * The id
      */
     public void setId(Integer id) {
         this.id = id;
     }
 
     /**
-     * 
+     *
      * @return
-     *     The name
+     * The name
      */
     public String getName() {
         return name;
     }
 
     /**
-     * 
+     *
      * @param name
-     *     The name
+     * The name
      */
     public void setName(String name) {
         this.name = name;
     }
 
     /**
-     * 
+     *
      * @return
-     *     The image
+     * The image
      */
     public String getImage() {
         return image;
     }
 
     /**
-     * 
+     *
      * @param image
-     *     The image
+     * The image
      */
     public void setImage(String image) {
         this.image = image;
     }
 
     /**
-     * 
+     *
      * @return
-     *     The address
+     * The interior
+     */
+    public String getInterior() {
+        return interior;
+    }
+
+    /**
+     *
+     * @param interior
+     * The interior
+     */
+    public void setInterior(String interior) {
+        this.interior = interior;
+    }
+
+    /**
+     *
+     * @return
+     * The address
      */
     public String getAddress() {
         return address;
     }
 
     /**
-     * 
+     *
      * @param address
-     *     The address
+     * The address
      */
     public void setAddress(String address) {
         this.address = address;
     }
 
     /**
-     * 
+     *
      * @return
-     *     The coordN
+     * The coordN
      */
     public String getCoordN() {
         return coordN;
     }
 
     /**
-     * 
+     *
      * @param coordN
-     *     The coord_n
+     * The coord_n
      */
     public void setCoordN(String coordN) {
         this.coordN = coordN;
     }
 
     /**
-     * 
+     *
      * @return
-     *     The coordE
+     * The coordE
      */
     public String getCoordE() {
         return coordE;
     }
 
     /**
-     * 
+     *
      * @param coordE
-     *     The coord_e
+     * The coord_e
      */
     public void setCoordE(String coordE) {
         this.coordE = coordE;
     }
 
     /**
-     * 
+     *
      * @return
-     *     The rate
+     * The rate
      */
     public String getRate() {
         return rate;
     }
 
     /**
-     * 
+     *
      * @param rate
-     *     The rate
+     * The rate
      */
     public void setRate(String rate) {
         this.rate = rate;
