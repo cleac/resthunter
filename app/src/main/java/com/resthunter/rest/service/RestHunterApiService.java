@@ -4,6 +4,7 @@ import com.resthunter.rest.model.Category;
 import com.resthunter.rest.model.Dish;
 import com.resthunter.rest.model.Ingredient;
 import com.resthunter.rest.model.MenuEntry;
+import com.resthunter.rest.model.Place;
 import com.resthunter.rest.model.Restaurant;
 
 import java.util.ArrayList;
@@ -34,6 +35,9 @@ public interface RestHunterApiService {
     @GET("/api/restaurant?format=json")
     public void getRestaurantList(retrofit.Callback<ArrayList<Restaurant>> callback);
 
+    @GET("/api/place?format=json")
+    public void getPlaceList(retrofit.Callback<ArrayList<Place>> callback);
+
 
     @GET("/api/dish?format=json&ordering={field}")
     public void getDishList(@Path("field") String field,retrofit.Callback<ArrayList<Dish>> callback);
@@ -49,4 +53,7 @@ public interface RestHunterApiService {
 
     @GET("/api/restaurant?format=json&ordering={field}")
     public void getRestaurantList(@Path("field") String field,retrofit.Callback<ArrayList<Restaurant>> callback);
+
+    @GET("/api/place?format=json&ordering={field}")
+    public void getPlaceList(@Path("field") String field,retrofit.Callback<ArrayList<Place>> callback);
 }
