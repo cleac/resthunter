@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -31,10 +32,17 @@ import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.resthunter.R;
+import com.resthunter.rest.RestClient;
+import com.resthunter.rest.model.Restaurant;
 import com.resthunter.util.Utils;
 import com.resthunter.view.LabeledMapPoint;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseActivity implements ObservableScrollViewCallbacks {
 
@@ -185,14 +193,12 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
-        LabeledMapPoint v = new LabeledMapPoint(this);
-        v.setText(String.valueOf(24));
-        mMap.addMarker(new MarkerOptions().position(new LatLng(0,0)).icon(BitmapDescriptorFactory.fromBitmap(Utils.loadBitmapFromView(v))));
     }
 
     private void getCurrentLocation() {
         double[] d = getLocation();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(d[0], d[1]), ZOOM));
+        fetchRestaurants();
     }
 
     private double[] getLocation() {
@@ -212,6 +218,29 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
             gps[1] = l.getLongitude();
         }
         return gps;
+    }
+
+    private void fetchRestaurants() {
+        Callback<ArrayList<Restaurant>> callback = new retrofit.Callback<ArrayList<Restaurant>>() {
+
+            @Override
+            public void success(ArrayList<Restaurant> restaurants, Response response) {
+                LabeledMapPoint lmp;
+                for (Restaurant restaurant : restaurants) {
+                    double lng = Double.valueOf(restaurant.getCoordN());
+                    double lat = Double.valueOf(restaurant.getCoordE());
+                    lmp = new LabeledMapPoint(SlidingUpBaseActivity.this);
+                    lmp.setText(String.valueOf(restaurant.getId()));
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.fromBitmap(Utils.loadBitmapFromView(lmp))));
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(getClass().getName(), error.getMessage(), error);
+            }
+        };
+        new RestClient().getApiService().getRestaurantList(callback);
     }
 
 
