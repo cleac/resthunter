@@ -25,12 +25,10 @@ public class MapView extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment MapView.
      */
     // TODO: Rename and change types and number of parameters
-    public static MapView newInstance(String param1, String param2) {
+    public static MapView newInstance() {
         MapView fragment = new MapView();
         return fragment;
     }
@@ -51,7 +49,6 @@ public class MapView extends Fragment {
         return inflater.inflate(R.layout.map_view, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);

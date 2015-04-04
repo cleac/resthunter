@@ -9,6 +9,6 @@ public class TestGenerateWebView extends AndroidTestCase {
     public static final String LOG_TAG = TestGenerateWebView.class.getSimpleName();
 
     public void testBuildWebView() throws Throwable {
-         new RestaurantMapView().show();
+         new RestaurantMapGenerator().getDocument();
     }
 }
