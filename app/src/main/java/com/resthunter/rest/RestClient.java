@@ -12,12 +12,11 @@ import retrofit.converter.GsonConverter;
  */
 public class RestClient {
 
-    public static final String base_url = "https://api.github.com";
+    public static final String base_url = "http://192.168.21.38:666";
     private final RestHunterApiService apiService;
 
     RestClient() {
         Gson gson = new GsonBuilder()
-                .setDateFormat("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'SSS'Z'")
                 .create();
 
         RestAdapter restAdapter = new RestAdapter.Builder()
