@@ -5,11 +5,17 @@ package com.resthunter.SlidingUpWidget;
  */
 
 import android.content.Context;
+import android.media.Image;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.resthunter.R;
+import com.resthunter.Restaurant;
 
 import java.util.ArrayList;
 
@@ -18,10 +24,10 @@ public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final int VIEW_TYPE_ITEM = 1;
 
     private LayoutInflater mInflater;
-    private ArrayList<String> mItems;
+    private ArrayList<Restaurant> mItems;
     private View mHeaderView;
 
-    public SimpleHeaderRecyclerAdapter(Context context, ArrayList<String> items, View headerView) {
+    public SimpleHeaderRecyclerAdapter(Context context, ArrayList<Restaurant> items, View headerView) {
         mInflater = LayoutInflater.from(context);
         mItems = items;
         mHeaderView = headerView;
@@ -46,14 +52,16 @@ public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
         if (viewType == VIEW_TYPE_HEADER) {
             return new HeaderViewHolder(mHeaderView);
         } else {
-            return new ItemViewHolder(mInflater.inflate(android.R.layout.simple_list_item_1, parent, false));
+            return new ItemViewHolder(mInflater.inflate(R.layout.restaurant_item, parent, false));
         }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof ItemViewHolder) {
-            ((ItemViewHolder) viewHolder).textView.setText(mItems.get(position - 1));
+            Log.d("Set", "setting here");
+            ((ItemViewHolder) viewHolder).mRestaurantName.setText(mItems.get(position - 1).getRestaurantName());
+            ((ItemViewHolder) viewHolder).mRestaurantImage.setImageDrawable(mItems.get(position - 1).getRestaurantImage());
         }
     }
 
@@ -64,11 +72,13 @@ public class SimpleHeaderRecyclerAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     static class ItemViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView mRestaurantName;
+        ImageView mRestaurantImage;
 
         public ItemViewHolder(View view) {
             super(view);
-            textView = (TextView) view.findViewById(android.R.id.text1);
+            mRestaurantName = (TextView) view.findViewById(R.id.restaurant_name);
+            mRestaurantImage = (ImageView) view.findViewById(R.id.restaurant_image);
         }
     }
 }

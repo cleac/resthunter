@@ -10,6 +10,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -24,13 +25,24 @@ import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameL
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.resthunter.R;
+import com.resthunter.rest.RestClient;
+import com.resthunter.rest.model.Restaurant;
+import com.resthunter.util.Utils;
+import com.resthunter.view.LabeledMapPoint;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseActivity implements ObservableScrollViewCallbacks {
 
@@ -87,7 +99,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private static final int ZOOM = 15;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
         setUpMapIfNeeded();
@@ -100,7 +112,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-        mToolbarColor = getResources().getColor(R.color.primary);
+        mToolbarColor = getResources().getColor(R.color.material_orange_500);
         mToolbar.setBackgroundColor(Color.TRANSPARENT);
         mToolbar.setTitle("");
 
@@ -109,7 +121,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         mHeaderBarHeight = getResources().getDimensionPixelSize(R.dimen.header_bar_height);
         mSlidingSlop = getResources().getDimensionPixelSize(R.dimen.sliding_slop);
         mActionBarSize = getActionBarSize();
-        mColorPrimary = getResources().getColor(R.color.primary);
+        mColorPrimary = getResources().getColor(R.color.material_orange_500);
         mSlidingHeaderBlueSize = getResources().getDimensionPixelSize(R.dimen.sliding_overlay_blur_size);
 
         mHeader = findViewById(R.id.header);
@@ -186,6 +198,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private void getCurrentLocation() {
         double[] d = getLocation();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(d[0], d[1]), ZOOM));
+        fetchRestaurants();
     }
 
     private double[] getLocation() {
@@ -205,6 +218,29 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
             gps[1] = l.getLongitude();
         }
         return gps;
+    }
+
+    private void fetchRestaurants() {
+        Callback<ArrayList<Restaurant>> callback = new retrofit.Callback<ArrayList<Restaurant>>() {
+
+            @Override
+            public void success(ArrayList<Restaurant> restaurants, Response response) {
+                LabeledMapPoint lmp;
+                for (Restaurant restaurant : restaurants) {
+                    double lng = Double.valueOf(restaurant.getCoordN());
+                    double lat = Double.valueOf(restaurant.getCoordE());
+                    lmp = new LabeledMapPoint(SlidingUpBaseActivity.this);
+                    lmp.setText(String.valueOf(restaurant.getId()));
+                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.fromBitmap(Utils.loadBitmapFromView(lmp))));
+                }
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e(getClass().getName(), error.getMessage(), error);
+            }
+        };
+        new RestClient().getApiService().getRestaurantList(callback);
     }
 
 
@@ -378,7 +414,6 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         float imageTranslationY = Math.max(0, imageAnimatableHeight - (imageAnimatableHeight - translationY) * imageTranslationScale);
         ViewHelper.setTranslationY(mImageView, imageTranslationY);
 
-        // Show/hide FAB
         if (ViewHelper.getTranslationY(mInterceptionLayout) < mFlexibleSpaceImageHeight) {
         } else {
             if (animated) {
