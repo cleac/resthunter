@@ -1,11 +1,13 @@
 package com.resthunter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,9 +37,9 @@ public class MainActivity extends SlidingUpBaseActivity<ObservableRecyclerView> 
     public static class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
         private Context mContext;
         private LayoutInflater mInflater;
-        private ArrayList<String> mItems;
+        private ArrayList<Restaurant> mItems;
 
-        public CustomAdapter(Context context, ArrayList<String> items) {
+        public CustomAdapter(Context context, ArrayList<Restaurant> items) {
             mContext = context;
             mInflater = LayoutInflater.from(context);
             mItems = items;
@@ -50,32 +52,35 @@ public class MainActivity extends SlidingUpBaseActivity<ObservableRecyclerView> 
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(mContext, mInflater.inflate(android.R.layout.simple_list_item_1, parent, false));
+            return new ViewHolder(mContext, mInflater.inflate(R.layout.restaurant_item, parent, false));
         }
 
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
-            viewHolder.textView.setText(mItems.get(position));
+            viewHolder.mRestaurantName.setText(mItems.get(position).getRestaurantName());
+            viewHolder.mRestaurantImage.setImageDrawable(mItems.get(position).getRestaurantImage());
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
-            TextView textView;
+            TextView mRestaurantName;
+            ImageView mRestaurantImage;
             Context context;
 
             public ViewHolder(Context context, View view) {
                 super(view);
                 this.context = context;
-                this.textView = (TextView) view.findViewById(android.R.id.text1);
-                this.textView.setOnClickListener(new View.OnClickListener() {
+                this.mRestaurantName = (TextView) view.findViewById(R.id.restaurant_name);
+                this.mRestaurantImage = (ImageView) view.findViewById(R.id.restaurant_image);
+                view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        click(getPosition() + 1);
+                        click(1);
                     }
                 });
             }
 
             private void click(int i) {
-                Toast.makeText(context, "Button " + i + " is clicked", Toast.LENGTH_SHORT).show();
+                context.startActivity(new Intent(context, RestaurantActivity.class));
             }
         }
     }

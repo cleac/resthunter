@@ -5,6 +5,7 @@ package com.resthunter.SlidingUpWidget;
  */
 
 import android.content.res.TypedArray;
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -15,6 +16,7 @@ import android.widget.GridView;
 import android.widget.ListView;
 
 import com.resthunter.R;
+import com.resthunter.Restaurant;
 
 import java.util.ArrayList;
 
@@ -36,14 +38,17 @@ public abstract class BaseActivity extends ActionBarActivity {
         return findViewById(android.R.id.content).getHeight();
     }
 
-    public static ArrayList<String> getDummyData() {
+    public static ArrayList<Restaurant> getDummyData() {
         return getDummyData(NUM_OF_ITEMS);
     }
 
-    public static ArrayList<String> getDummyData(int num) {
-        ArrayList<String> items = new ArrayList<String>();
-        for (int i = 1; i <= num; i++) {
-            items.add("Item " + i);
+    public static ArrayList<Restaurant> getDummyData(int num) {
+        ArrayList<Restaurant> items = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            Restaurant restaurant = new Restaurant();
+            restaurant.setRestaurantName("Name " + i);
+            restaurant.setRestaurantImage(null);
+            items.add(restaurant);
         }
         return items;
     }
@@ -57,7 +62,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     protected void setDummyData(ListView listView, int num) {
-        listView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getDummyData(num)));
+        listView.setAdapter(new ArrayAdapter<Restaurant>(this, R.layout.restaurant_item, getDummyData(num)));
     }
 
     protected void setDummyDataWithHeader(ListView listView, int headerHeight) {
@@ -79,7 +84,7 @@ public abstract class BaseActivity extends ActionBarActivity {
     }
 
     protected void setDummyData(GridView gridView) {
-        gridView.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, getDummyData()));
+        gridView.setAdapter(new ArrayAdapter<Restaurant>(this, R.layout.restaurant_item, getDummyData()));
     }
 
     protected void setDummyData(RecyclerView recyclerView) {

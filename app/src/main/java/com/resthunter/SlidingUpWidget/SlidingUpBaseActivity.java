@@ -87,7 +87,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private static final int ZOOM = 15;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
         setUpMapIfNeeded();
@@ -100,7 +100,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-        mToolbarColor = getResources().getColor(R.color.primary);
+        mToolbarColor = getResources().getColor(R.color.material_orange_500);
         mToolbar.setBackgroundColor(Color.TRANSPARENT);
         mToolbar.setTitle("");
 
@@ -109,7 +109,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         mHeaderBarHeight = getResources().getDimensionPixelSize(R.dimen.header_bar_height);
         mSlidingSlop = getResources().getDimensionPixelSize(R.dimen.sliding_slop);
         mActionBarSize = getActionBarSize();
-        mColorPrimary = getResources().getColor(R.color.primary);
+        mColorPrimary = getResources().getColor(R.color.material_orange_500);
         mSlidingHeaderBlueSize = getResources().getDimensionPixelSize(R.dimen.sliding_overlay_blur_size);
 
         mHeader = findViewById(R.id.header);
@@ -378,7 +378,6 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         float imageTranslationY = Math.max(0, imageAnimatableHeight - (imageAnimatableHeight - translationY) * imageTranslationScale);
         ViewHelper.setTranslationY(mImageView, imageTranslationY);
 
-        // Show/hide FAB
         if (ViewHelper.getTranslationY(mInterceptionLayout) < mFlexibleSpaceImageHeight) {
         } else {
             if (animated) {
