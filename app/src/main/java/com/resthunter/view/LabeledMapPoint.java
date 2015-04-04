@@ -17,14 +17,17 @@ public class LabeledMapPoint extends RelativeLayout {
 
   public LabeledMapPoint(Context context) {
     super(context);
+    initView(context);
   }
 
   public LabeledMapPoint(Context context, AttributeSet attrs) {
     super(context, attrs);
+    initView(context);
   }
 
   public LabeledMapPoint(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
+    initView(context);
   }
 
   private void initView(Context context) {

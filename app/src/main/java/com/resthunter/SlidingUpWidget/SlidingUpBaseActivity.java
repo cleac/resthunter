@@ -24,11 +24,15 @@ import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameL
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.resthunter.R;
+import com.resthunter.util.Utils;
+import com.resthunter.view.LabeledMapPoint;
 
 import java.util.List;
 
@@ -181,6 +185,9 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
+        LabeledMapPoint v = new LabeledMapPoint(this);
+        v.setText(String.valueOf(24));
+        mMap.addMarker(new MarkerOptions().position(new LatLng(0,0)).icon(BitmapDescriptorFactory.fromBitmap(Utils.loadBitmapFromView(v))));
     }
 
     private void getCurrentLocation() {
