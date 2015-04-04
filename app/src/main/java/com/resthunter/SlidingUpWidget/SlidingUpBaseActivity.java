@@ -8,9 +8,9 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -33,16 +33,14 @@ import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.resthunter.R;
 import com.resthunter.rest.RestClient;
+import com.resthunter.rest.model.Place;
 import com.resthunter.rest.model.Restaurant;
+import com.resthunter.rest.service.RestHunterApiService;
 import com.resthunter.util.Utils;
 import com.resthunter.view.LabeledMapPoint;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseActivity implements ObservableScrollViewCallbacks {
 
@@ -221,26 +219,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     }
 
     private void fetchRestaurants() {
-        Callback<ArrayList<Restaurant>> callback = new retrofit.Callback<ArrayList<Restaurant>>() {
-
-            @Override
-            public void success(ArrayList<Restaurant> restaurants, Response response) {
-                LabeledMapPoint lmp;
-                for (Restaurant restaurant : restaurants) {
-                    double lng = Double.valueOf(restaurant.getCoordN());
-                    double lat = Double.valueOf(restaurant.getCoordE());
-                    lmp = new LabeledMapPoint(SlidingUpBaseActivity.this);
-                    lmp.setText(String.valueOf(restaurant.getId()));
-                    mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.fromBitmap(Utils.loadBitmapFromView(lmp))));
-                }
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e(getClass().getName(), error.getMessage(), error);
-            }
-        };
-        new RestClient().getApiService().getRestaurantList(callback);
+        new FetchRestaurantsTask().execute();
     }
 
 
@@ -530,5 +509,51 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
 
     private float getAnchorYImage() {
         return mImageView.getHeight();
+    }
+
+    /**
+     * An ancient evil was awoken to code network requests quickly
+     */
+    private class FetchRestaurantsTask extends AsyncTask<Void, Void, FetchRestaurantsTask.Compound> {
+        class Compound {
+            public ArrayList<Restaurant> restaurants;
+            public ArrayList<Place> places;
+        }
+
+        @Override
+        protected Compound doInBackground(Void... params) {
+            RestHunterApiService apiService = new RestClient().getApiService();
+            ArrayList<Place> places = apiService.getPlaceList();
+            ArrayList<Restaurant> restaurants = apiService.getRestaurantList();
+
+            Compound cmpnd = new Compound();
+            cmpnd.places = places;
+            cmpnd.restaurants = restaurants;
+
+            return cmpnd;
+       }
+
+        @Override
+        protected void onPostExecute(Compound compound) {
+            mMap.clear();
+
+            int free;
+            LabeledMapPoint lmp;
+            for (Restaurant restaurant : compound.restaurants) {
+                free = 0;
+                double lat = Double.valueOf(restaurant.getCoordE());
+                double lng = Double.valueOf(restaurant.getCoordN());
+
+                for (Place place : compound.places) {
+                    if (place.getRestaurant()!=null && place.getRestaurant().equals(restaurant.getId()) && place.getUser()==null) {
+                        free++;
+                    }
+                }
+
+                lmp = new LabeledMapPoint(SlidingUpBaseActivity.this);
+                lmp.setText(String.valueOf(free));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.fromBitmap(Utils.loadBitmapFromView(lmp))));
+            }
+        }
     }
 }
