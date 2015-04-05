@@ -3,6 +3,9 @@ package com.resthunter.rest.model;
 
 import com.google.gson.annotations.Expose;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MenuEntry {
 
     @Expose
@@ -10,39 +13,39 @@ public class MenuEntry {
     @Expose
     private Integer restaurant;
     @Expose
-    private Boolean is_taken;
+    private ArrayList<Integer> dishes = new ArrayList<Integer>();
 
     /**
-     * 
+     *
      * @return
-     *     The id
+     * The id
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 
+     *
      * @param id
-     *     The id
+     * The id
      */
     public void setId(Integer id) {
         this.id = id;
     }
 
     /**
-     * 
+     *
      * @return
-     *     The restaurant
+     * The restaurant
      */
     public Integer getRestaurant() {
         return restaurant;
     }
 
     /**
-     * 
+     *
      * @param restaurant
-     *     The restaurant
+     * The restaurant
      */
     public void setRestaurant(Integer restaurant) {
         this.restaurant = restaurant;
@@ -51,17 +54,20 @@ public class MenuEntry {
     /**
      *
      * @return
-     *  isTaken
+     * The dishes
      */
-    public Boolean getIs_taken() {
-        return is_taken;
+    public ArrayList<Integer> getDishes() {
+        return dishes;
     }
 
     /**
      *
-     * @param is_taken
+     * @param dishes
+     * The dishes
      */
-    public void setIs_taken(Boolean is_taken) {
-        this.is_taken = is_taken;
+    public void setDishes(ArrayList<Integer> dishes) {
+        this.dishes = dishes;
     }
+
+
 }

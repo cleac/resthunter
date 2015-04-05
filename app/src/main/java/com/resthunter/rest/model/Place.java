@@ -1,6 +1,7 @@
 package com.resthunter.rest.model;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class Place {
 
@@ -10,18 +11,19 @@ public class Place {
     private Integer x;
     @Expose
     private Integer y;
+    @SerializedName("is_taken")
     @Expose
-    private Boolean is_taken;
+    private Boolean isTaken;
     @Expose
     private Integer width;
     @Expose
-    private Integer places;
-    @Expose
     private Integer height;
+    @Expose
+    private Integer places;
     @Expose
     private Integer restaurant;
     @Expose
-    private Integer user;
+    private Object user;
 
     /**
      *
@@ -80,6 +82,78 @@ public class Place {
     /**
      *
      * @return
+     * The isTaken
+     */
+    public Boolean getIsTaken() {
+        return isTaken;
+    }
+
+    /**
+     *
+     * @param isTaken
+     * The is_taken
+     */
+    public void setIsTaken(Boolean isTaken) {
+        this.isTaken = isTaken;
+    }
+
+    /**
+     *
+     * @return
+     * The width
+     */
+    public Integer getWidth() {
+        return width;
+    }
+
+    /**
+     *
+     * @param width
+     * The width
+     */
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    /**
+     *
+     * @return
+     * The height
+     */
+    public Integer getHeight() {
+        return height;
+    }
+
+    /**
+     *
+     * @param height
+     * The height
+     */
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    /**
+     *
+     * @return
+     * The places
+     */
+    public Integer getPlaces() {
+        return places;
+    }
+
+    /**
+     *
+     * @param places
+     * The places
+     */
+    public void setPlaces(Integer places) {
+        this.places = places;
+    }
+
+    /**
+     *
+     * @return
      * The restaurant
      */
     public Integer getRestaurant() {
@@ -100,7 +174,7 @@ public class Place {
      * @return
      * The user
      */
-    public Integer getUser() {
+    public Object getUser() {
         return user;
     }
 
@@ -109,47 +183,8 @@ public class Place {
      * @param user
      * The user
      */
-    public void setUser(Integer user) {
+    public void setUser(Object user) {
         this.user = user;
     }
 
-/*    public Integer getIs_taken() {
-        return is_taken;
-    }
-
-    public void setIs_taken(Integer is_taken) {
-        this.is_taken = is_taken;
-    }*/
-
-    public Integer getWidth() {
-        return width;
-    }
-
-    public void setWidth(Integer width) {
-        this.width = width;
-    }
-
-    public Integer getHeight() {
-        return height;
-    }
-
-    public void setHeight(Integer height) {
-        this.height = height;
-    }
-
-    public Integer getPlaces() {
-        return places;
-    }
-
-    public void setPlaces(Integer places) {
-        this.places = places;
-    }
-
-    public void setIs_taken(Boolean is_taken) {
-        this.is_taken = is_taken;
-    }
-
-    public Boolean getIs_taken() {
-        return is_taken;
-    }
 }

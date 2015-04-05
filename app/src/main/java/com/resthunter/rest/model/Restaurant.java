@@ -4,6 +4,8 @@ package com.resthunter.rest.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class Restaurant {
 
     @Expose
@@ -24,6 +26,12 @@ public class Restaurant {
     private String coordE;
     @Expose
     private String rate;
+    @Expose
+    private Integer category;
+    @Expose
+    private Integer kitchen;
+    @Expose
+    private ArrayList<Integer> services = new ArrayList<Integer>();
 
     /**
      *
@@ -169,4 +177,57 @@ public class Restaurant {
         this.rate = rate;
     }
 
+    /**
+     *
+     * @return
+     * The category
+     */
+    public Integer getCategory() {
+        return category;
+    }
+
+    /**
+     *
+     * @param category
+     * The category
+     */
+    public void setCategory(Integer category) {
+        this.category = category;
+    }
+
+    /**
+     *
+     * @return
+     * The kitchen
+     */
+    public Integer getKitchen() {
+        return kitchen;
+    }
+
+    /**
+     *
+     * @param kitchen
+     * The kitchen
+     */
+    public void setKitchen(Integer kitchen) {
+        this.kitchen = kitchen;
+    }
+
+    /**
+     *
+     * @return
+     * The services
+     */
+    public ArrayList<Integer> getServices() {
+        return services;
+    }
+
+    /**
+     *
+     * @param services
+     * The services
+     */
+    public void setServices(ArrayList<Integer> services) {
+        this.services = services;
+    }
 }
