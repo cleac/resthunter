@@ -11,6 +11,14 @@ public class Place {
     @Expose
     private Integer y;
     @Expose
+    private Boolean is_taken;
+    @Expose
+    private Integer width;
+    @Expose
+    private Integer places;
+    @Expose
+    private Integer height;
+    @Expose
     private Integer restaurant;
     @Expose
     private Integer user;
@@ -105,4 +113,43 @@ public class Place {
         this.user = user;
     }
 
+/*    public Integer getIs_taken() {
+        return is_taken;
+    }
+
+    public void setIs_taken(Integer is_taken) {
+        this.is_taken = is_taken;
+    }*/
+
+    public Integer getWidth() {
+        return width;
+    }
+
+    public void setWidth(Integer width) {
+        this.width = width;
+    }
+
+    public Integer getHeight() {
+        return height;
+    }
+
+    public void setHeight(Integer height) {
+        this.height = height;
+    }
+
+    public Integer getPlaces() {
+        return places;
+    }
+
+    public void setPlaces(Integer places) {
+        this.places = places;
+    }
+
+    public void setIs_taken(Boolean is_taken) {
+        this.is_taken = is_taken;
+    }
+
+    public Boolean getIs_taken() {
+        return is_taken;
+    }
 }

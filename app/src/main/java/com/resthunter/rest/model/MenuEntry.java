@@ -9,6 +9,8 @@ public class MenuEntry {
     private Integer id;
     @Expose
     private Integer restaurant;
+    @Expose
+    private Boolean is_taken;
 
     /**
      * 
@@ -46,4 +48,20 @@ public class MenuEntry {
         this.restaurant = restaurant;
     }
 
+    /**
+     *
+     * @return
+     *  isTaken
+     */
+    public Boolean getIs_taken() {
+        return is_taken;
+    }
+
+    /**
+     *
+     * @param is_taken
+     */
+    public void setIs_taken(Boolean is_taken) {
+        this.is_taken = is_taken;
+    }
 }
