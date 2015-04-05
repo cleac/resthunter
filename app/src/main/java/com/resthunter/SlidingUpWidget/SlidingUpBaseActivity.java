@@ -4,8 +4,11 @@ package com.resthunter.SlidingUpWidget;
  * Created by denys on 4/4/15.
  */
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -14,6 +17,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
@@ -571,6 +575,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
             LabeledMapPoint lmp;
             restaurants.clear();
             restaurants.addAll(compound.restaurants);
+            notifyMenu(restaurants.get(0));
             for (Restaurant restaurant : compound.restaurants) {
                 free = 0;
                 double lat = Double.valueOf(restaurant.getCoordN());
@@ -590,5 +595,31 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
                         .title(String.valueOf(restaurant.getId())));
             }
         }
+    }
+
+    private void notifyMenu(Restaurant restaurant) {
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getApplicationContext())
+                        .setSmallIcon(R.drawable.ic_stat_maps_local_restaurant)
+                        .setContentTitle(restaurant.getName())
+                        .setContentText(restaurant.getAddress());
+
+        // Make something interesting happen when the user clicks on the notification.
+        // In this case, opening the app is sufficient.
+        Intent resultIntent = new Intent(getApplicationContext(), RestaurantActivity.class);
+        resultIntent.putExtra("EXTRA_RESTAURANT", restaurant);
+        // The stack builder object will contain an artificial back stack for the
+        // started Activity.
+        // This ensures that navigating backward from the Activity leads out of
+        // your application to the Home screen.
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getApplicationContext());
+        stackBuilder.addNextIntent(resultIntent);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        NotificationManager mNotificationManager =
+                (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        // WEATHER_NOTIFICATION_ID allows you to update the notification later on.
+        mNotificationManager.notify(0, mBuilder.build());
     }
 }

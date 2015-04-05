@@ -8,6 +8,7 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -71,6 +72,8 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
     private ImageView mAvatar2;
     private ImageView mAvatar3;
     private ImageView mAvatar4;
+
+    private CardView cardButton;
 
     private ArrayList<User> users;
     private Restaurant restaurant;
@@ -176,6 +179,14 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         mAvatar2 = (ImageView) findViewById(R.id.avatar_2);
         mAvatar3 = (ImageView) findViewById(R.id.avatar_3);
         mAvatar4 = (ImageView) findViewById(R.id.avatar_4);
+
+        cardButton = (CardView) findViewById(R.id.card_button);
+        cardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), InteriorActivity.class));
+            }
+        });
 
         mRecyclerView = (RecyclerView) findViewById(R.id.review_list);
         manager = new LinearLayoutManager(this);
@@ -414,7 +425,6 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         reviews.add("Nice restaurant");
         reviews.add("Reccomend it for everybody");
         reviews.add("I loved yhat kitchen");
-        reviews.add("Not bad");
         return reviews;
     }
 
