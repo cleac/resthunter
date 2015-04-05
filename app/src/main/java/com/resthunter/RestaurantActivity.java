@@ -16,6 +16,7 @@ import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.resthunter.SlidingUpWidget.BaseActivity;
+import com.resthunter.rest.model.Restaurant;
 
 /**
  * Created by denys on 4/4/15.
@@ -185,5 +186,9 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
             ViewPropertyAnimator.animate(mFab).scaleX(0).scaleY(0).setDuration(200).start();
             mFabIsShown = false;
         }
+    }
+
+    private void openRestaurantLocationOnMap(Restaurant restaurant) {
+
     }
 }

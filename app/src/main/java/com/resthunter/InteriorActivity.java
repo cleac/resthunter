@@ -66,7 +66,6 @@ public class InteriorActivity extends ActionBarActivity {
     @Override
     protected void onPostExecute(String aVoid) {
       super.onPostExecute(aVoid);
-      Log.v(SIMPLE_NAME,aVoid);
       loadDataWithBaseURL(aVoid);
     }
   }

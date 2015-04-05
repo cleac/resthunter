@@ -23,6 +23,6 @@ public class WebAppInterface {
   @JavascriptInterface
   public void bookTable(String id) {
     Toast.makeText(mContext,  "Table " + id + " booked", Toast.LENGTH_SHORT).show();
-    ((InteriorActivity)mContext).finish();
+//    ((InteriorActivity)mContext).finish();
   }
 }
