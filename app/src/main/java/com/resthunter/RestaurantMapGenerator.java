@@ -30,7 +30,7 @@ public class RestaurantMapGenerator {
                     .append(rect_class_end);
             Integer circle_x = current_place.get(i).getX() + (current_place.get(i).getWidth() / 2),
                     circle_y = current_place.get(i).getY() + (current_place.get(i).getHeight() / 2);
-            if(current_place.get(i).getIs_taken()) {
+            if(current_place.get(i).getIsTaken()) {
                 //<circle class='avatar' cx="90" cy="210" r="15" data-table="5"style="fill:rgba(240,255,10,1.0)"  />
                 document.append(circle_class_start)
                         .append(circle_x)
@@ -76,10 +76,9 @@ public class RestaurantMapGenerator {
             "<h1>My first SVG</h1>\n" +
             "<?xml version=\"1.0\" standalone=\"no\"?>\n" +
             "<svg width=\"625\" height=\"422\" version=\"1.1\"\n" +
-            "     xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink= \"http://www.w3.org/1999/xlink\">\n" +
-            "<defs>";
+            "     xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink= \"http://www.w3.org/1999/xlink\">\n";
     public static final String img_start = "<image xlink:href=\"";
-    public static final String img_end = "x=\"0\" y=\"0\" height=\"100%\" width=\"100%\"/>";
+    public static final String img_end = "\" x=\"0\" y=\"0\" height=\"100%\" width=\"100%\"/>";
     public static final String rect_class_start = "<rect class='available' fill-opacity=\"fill-opacity\" data-table=\"2\" x=\"";
     public static final String rect_class_end = "\" width=\"94\" height=\"45\" rx=\"20\" ry=\"20\" style=\"fill:rgba(128,255,0,0.5);stroke-width:1;stroke:rgba(0,0,0,1.0)\" />";
     public static final String rect_class_middle = "\" y=\"";

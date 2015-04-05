@@ -5,8 +5,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Restaurant {
+
 
     @Expose
     private Integer id;
@@ -31,7 +33,7 @@ public class Restaurant {
     @Expose
     private Integer kitchen;
     @Expose
-    private ArrayList<Integer> services = new ArrayList<Integer>();
+    private List<Integer> services = new ArrayList<Integer>();
 
     /**
      *
@@ -218,7 +220,7 @@ public class Restaurant {
      * @return
      * The services
      */
-    public ArrayList<Integer> getServices() {
+    public List<Integer> getServices() {
         return services;
     }
 
@@ -227,7 +229,7 @@ public class Restaurant {
      * @param services
      * The services
      */
-    public void setServices(ArrayList<Integer> services) {
+    public void setServices(List<Integer> services) {
         this.services = services;
     }
 }
