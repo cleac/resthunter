@@ -53,6 +53,10 @@ public interface RestHunterApiService {
     @GET("/api/user?format=json")
     public ArrayList<User> getUserList();
 
+    @GET("/api/near/?n={n}&e={e}")
+    public ArrayList<Restaurant> getRestaurantsNear(@Path("n") double n,@Path("e") double e);
+
+
 
     @GET("/api/dish?format=json")
     public void getDishList(retrofit.Callback<ArrayList<Dish>> callback);
@@ -83,6 +87,9 @@ public interface RestHunterApiService {
 
     @GET("/api/user?format=json")
     public void getUserList(retrofit.Callback<ArrayList<User>> callback);
+
+    @GET("/api/near/?n={n}&e={e}")
+    public void getRestaurantsNear(@Path("n") double n,@Path("e") double e, retrofit.Callback<ArrayList<Restaurant>> callback);
 
 
     @GET("/api/dish?format=json&ordering={field}")
