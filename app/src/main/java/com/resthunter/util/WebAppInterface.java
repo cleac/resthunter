@@ -4,6 +4,8 @@ import android.content.Context;
 import android.webkit.JavascriptInterface;
 import android.widget.Toast;
 
+import com.resthunter.InteriorActivity;
+
 public class WebAppInterface {
   Context mContext;
 
@@ -21,5 +23,6 @@ public class WebAppInterface {
   @JavascriptInterface
   public void bookTable(String id) {
     Toast.makeText(mContext,  "Table " + id + " booked", Toast.LENGTH_SHORT).show();
+    ((InteriorActivity)mContext).finish();
   }
 }
