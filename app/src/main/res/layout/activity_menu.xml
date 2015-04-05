@@ -17,7 +17,7 @@
         app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <ua.stopfan.bookshare.UserInterface.widgets.SlidingTabLayout
+    <com.resthunter.ui.SlidingTabLayout
         android:background="?attr/colorPrimary"
         android:id="@+id/sliding_tabs"
         android:layout_width="match_parent"

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,18 +44,27 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
     private int mToolbarColor;
     private boolean mFabIsShown;
 
+    private ImageView mCallImageView;
+    private ImageView mWifiImageView;
+    private ImageView mCardImageView;
+    private ImageView mTimeImageView;
+
     private String name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurant);
-
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         Intent intent = getIntent();
         name = intent.getStringExtra("Name");
 
+        fillUiElements();
+        findAllViewsByIds();
+    }
+
+    private void fillUiElements() {
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_image);
         mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
         mActionBarSize = getActionBarSize();
@@ -76,12 +86,6 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         setTitle(null);
         mFab = findViewById(R.id.fab);
         setColorFab();
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(RestaurantActivity.this, "FAB is clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
         ViewHelper.setScaleX(mFab, 0);
         ViewHelper.setScaleY(mFab, 0);
@@ -90,19 +94,15 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
             @Override
             public void run() {
                 mScrollView.scrollTo(0, 1);
-
-                // If you'd like to start from scrollY == 0, don't write like this:
-                //mScrollView.scrollTo(0, 0);
-                // The initial scrollY is 0, so it won't invoke onScrollChanged().
-                // To do this, use the following:
-                //onScrollChanged(0, false, false);
-
-                // You can also achieve it with the following codes.
-                // This causes scroll change from 1 to 0.
-                //mScrollView.scrollTo(0, 1);
-                //mScrollView.scrollTo(0, 0);
             }
         });
+    }
+
+    private void findAllViewsByIds() {
+        mCallImageView = (ImageView) findViewById(R.id.callImageView);
+        mWifiImageView = (ImageView) findViewById(R.id.cardImageView);
+        mCardImageView = (ImageView) findViewById(R.id.cardImageView);
+        mTimeImageView = (ImageView) findViewById(R.id.timeImageView);
     }
 
     @Override
@@ -208,7 +208,8 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
             mFab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(), "Favourite", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    startActivity(intent);
                 }
             });
         }

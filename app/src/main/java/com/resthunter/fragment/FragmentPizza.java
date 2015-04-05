@@ -11,9 +11,9 @@ import android.view.ViewGroup;
 import com.resthunter.R;
 
 /**
- * Created by denys on 4/4/15.
+ * Created by denys on 4/5/15.
  */
-public class FragmentDeserts extends Fragment {
+public class FragmentPizza extends Fragment {
 
     private Context mContext;
 
@@ -22,11 +22,10 @@ public class FragmentDeserts extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = getActivity().getApplicationContext();
 
-        View rootView = inflater.inflate(R.layout.desert_fragment, container, false);
+        View rootView = inflater.inflate(R.layout.pizza_fragment, container, false);
 
 
         return rootView;
     }
-
 
 }

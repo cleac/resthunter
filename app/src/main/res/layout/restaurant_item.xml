@@ -23,6 +23,7 @@
                 android:layout_width="110dp"
                 android:layout_height="110dp"
                 android:id="@+id/restaurant_image"
+                android:background="@drawable/ic_launcher"
                 android:layout_margin="8dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentLeft="true"
@@ -34,20 +35,37 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Restaurant Name"
                 android:textSize="24sp"
+                android:layout_marginTop="16dp"
                 android:id="@+id/restaurant_name"
                 android:layout_alignTop="@+id/restaurant_image"
                 android:layout_toRightOf="@+id/restaurant_image"
                 android:layout_toEndOf="@+id/restaurant_image" />
 
-            <RatingBar
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/ratingBar"
-                android:layout_alignBottom="@+id/restaurant_image"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="24dp"
-                android:layout_marginEnd="24dp" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Kitchen"
+                android:textColor="@color/grey"
+                android:textSize="16sp"
+                android:id="@+id/restaurant_kitchen"
+                android:layout_below="@+id/restaurant_name"
+                android:layout_toRightOf="@+id/restaurant_image"
+                android:layout_toEndOf="@+id/restaurant_image" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Class"
+                android:textColor="@color/grey"
+                android:textSize="16sp"
+                android:id="@+id/restaurant_class"
+                android:layout_below="@+id/restaurant_name"
+                android:layout_toRightOf="@+id/restaurant_kitchen"
+                android:layout_toEndOf="@+id/restaurant_kitchen"
+                android:layout_marginLeft="41dp"
+                android:layout_marginStart="41dp" />
 
         </RelativeLayout>
 

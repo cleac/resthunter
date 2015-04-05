@@ -17,9 +17,9 @@ import com.resthunter.ui.FoodAdapter;
 import java.util.ArrayList;
 
 /**
- * Created by denys on 4/4/15.
+ * Created by denys on 4/5/15.
  */
-public class FragmentSalads extends Fragment{
+public class FragmentFirst extends Fragment {
 
     private Context mContext;
     private RecyclerView mRecyclerView;
@@ -28,14 +28,13 @@ public class FragmentSalads extends Fragment{
 
     private ArrayList<String> list;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mContext = getActivity().getApplicationContext();
 
-        View rootView = inflater.inflate(R.layout.salads_fragment, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.salads_recycler_view);
+        View rootView = inflater.inflate(R.layout.main_fragment, container, false);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.main_recycler_view);
         list = new ArrayList<>();
         fillFoodList();
 
