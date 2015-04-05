@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -29,12 +30,21 @@ import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameL
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.resthunter.R;
+import com.resthunter.rest.RestClient;
+import com.resthunter.rest.model.Place;
+import com.resthunter.rest.model.Restaurant;
+import com.resthunter.rest.service.RestHunterApiService;
+import com.resthunter.util.Utils;
+import com.resthunter.view.LabeledMapPoint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseActivity implements ObservableScrollViewCallbacks {
@@ -90,6 +100,8 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
 
     private GoogleMap mMap;
     private static final int ZOOM = 15;
+
+    private ArrayList<Restaurant> restaurants;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -218,6 +230,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private void getCurrentLocation() {
         double[] d = getLocation();
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(d[0], d[1]), ZOOM));
+        fetchRestaurants();
     }
 
     private double[] getLocation() {
@@ -237,6 +250,10 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
             gps[1] = l.getLongitude();
         }
         return gps;
+    }
+
+    private void fetchRestaurants() {
+        new FetchRestaurantsTask().execute();
     }
 
 
@@ -526,5 +543,60 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
 
     private float getAnchorYImage() {
         return mImageView.getHeight();
+    }
+
+    public ArrayList<Restaurant> getDummyData() {
+        if (restaurants == null) {
+            restaurants = new ArrayList<Restaurant>();
+        }
+        return restaurants;
+    }
+
+    /**
+     * An ancient evil was awoken to code network requests quickly
+     */
+    private class FetchRestaurantsTask extends AsyncTask<Void, Void, FetchRestaurantsTask.Compound> {
+        class Compound {
+            public ArrayList<Restaurant> restaurants;
+            public ArrayList<Place> places;
+        }
+
+        @Override
+        protected Compound doInBackground(Void... params) {
+            RestHunterApiService apiService = new RestClient().getApiService();
+            ArrayList<Place> places = apiService.getPlaceList();
+            ArrayList<Restaurant> restaurants = apiService.getRestaurantList();
+
+            Compound cmpnd = new Compound();
+            cmpnd.places = places;
+            cmpnd.restaurants = restaurants;
+
+            return cmpnd;
+       }
+
+        @Override
+        protected void onPostExecute(Compound compound) {
+            mMap.clear();
+
+            int free;
+            LabeledMapPoint lmp;
+            restaurants.clear();
+            restaurants.addAll(compound.restaurants);
+            for (Restaurant restaurant : compound.restaurants) {
+                free = 0;
+                double lat = Double.valueOf(restaurant.getCoordN());
+                double lng = Double.valueOf(restaurant.getCoordE());
+
+                for (Place place : compound.places) {
+                    if (place.getRestaurant()!=null && place.getRestaurant().equals(restaurant.getId()) && place.getUser()==null) {
+                        free++;
+                    }
+                }
+
+                lmp = new LabeledMapPoint(SlidingUpBaseActivity.this);
+                lmp.setText(String.valueOf(free));
+                mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.fromBitmap(Utils.loadBitmapFromView(lmp))));
+            }
+        }
     }
 }

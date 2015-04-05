@@ -7,6 +7,7 @@ import com.resthunter.rest.model.Category;
 import com.resthunter.rest.model.Dish;
 import com.resthunter.rest.model.Ingredient;
 import com.resthunter.rest.model.MenuEntry;
+import com.resthunter.rest.model.Place;
 import com.resthunter.rest.model.Restaurant;
 import com.resthunter.rest.service.RestHunterApiService;
 
@@ -100,5 +101,20 @@ public class TestGetInfo  extends AndroidTestCase {
             }
         };
         API_SERVICE.getRestaurantList(callback);
+    }
+
+    public void testGetPlaces() throws Throwable {
+        Callback<ArrayList<Place>> callback = new retrofit.Callback<ArrayList<Place>>() {
+            @Override
+            public void success(ArrayList<Place> o, Response response) {
+                Log.v(LOG_TAG, "Get success");
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                assertTrue("Error", false);
+            }
+        };
+        API_SERVICE.getPlaceList(callback);
     }
 }

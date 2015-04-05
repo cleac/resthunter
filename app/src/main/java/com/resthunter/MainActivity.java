@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.resthunter.SlidingUpWidget.SlidingUpBaseActivity;
+import com.resthunter.rest.model.Restaurant;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -47,6 +48,9 @@ public class MainActivity extends SlidingUpBaseActivity<ObservableRecyclerView> 
 
         @Override
         public int getItemCount() {
+            if (mItems == null) {
+                return 0;
+            }
             return mItems.size();
         }
 
@@ -57,8 +61,9 @@ public class MainActivity extends SlidingUpBaseActivity<ObservableRecyclerView> 
 
         @Override
         public void onBindViewHolder(ViewHolder viewHolder, int position) {
-            viewHolder.mRestaurantName.setText(mItems.get(position).getRestaurantName());
-            viewHolder.mRestaurantImage.setImageDrawable(mItems.get(position).getRestaurantImage());
+            viewHolder.mRestaurantName.setText(mItems.get(position).getName());
+            Picasso.with(mContext).load(mItems.get(position).getImage()).into(viewHolder.mRestaurantImage);
+            //mItems.get(position).getImage();
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
