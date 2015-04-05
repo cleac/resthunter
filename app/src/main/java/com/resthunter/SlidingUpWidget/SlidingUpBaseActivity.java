@@ -96,6 +96,8 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private GoogleMap mMap;
     private static final int ZOOM = 15;
 
+    private ArrayList<Restaurant> restaurants;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -511,6 +513,13 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         return mImageView.getHeight();
     }
 
+    public ArrayList<Restaurant> getDummyData() {
+        if (restaurants == null) {
+            restaurants = new ArrayList<Restaurant>();
+        }
+        return restaurants;
+    }
+
     /**
      * An ancient evil was awoken to code network requests quickly
      */
@@ -539,10 +548,12 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
 
             int free;
             LabeledMapPoint lmp;
+            restaurants.clear();
+            restaurants.addAll(compound.restaurants);
             for (Restaurant restaurant : compound.restaurants) {
                 free = 0;
-                double lat = Double.valueOf(restaurant.getCoordE());
-                double lng = Double.valueOf(restaurant.getCoordN());
+                double lat = Double.valueOf(restaurant.getCoordN());
+                double lng = Double.valueOf(restaurant.getCoordE());
 
                 for (Place place : compound.places) {
                     if (place.getRestaurant()!=null && place.getRestaurant().equals(restaurant.getId()) && place.getUser()==null) {
