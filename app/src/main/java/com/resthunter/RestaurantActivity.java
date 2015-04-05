@@ -1,5 +1,6 @@
 package com.resthunter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -7,8 +8,13 @@ import android.graphics.ColorMatrixColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +28,17 @@ import com.melnykov.fab.FloatingActionButton;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.resthunter.SlidingUpWidget.BaseActivity;
+import com.resthunter.rest.RestClient;
+import com.resthunter.rest.model.Restaurant;
+import com.resthunter.rest.model.User;
+import com.squareup.picasso.Downloader;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by denys on 4/4/15.
@@ -49,7 +66,17 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
     private ImageView mCardImageView;
     private ImageView mTimeImageView;
 
-    private String name;
+    private ImageView mAvatar1;
+    private ImageView mAvatar2;
+    private ImageView mAvatar3;
+    private ImageView mAvatar4;
+
+    private ArrayList<User> users;
+    private Restaurant restaurant;
+
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager manager;
+    private RecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +85,25 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
 
         Intent intent = getIntent();
-        name = intent.getStringExtra("Name");
+        restaurant = (Restaurant) intent.getSerializableExtra("EXTRA_RESTAURANT");
 
-        fillUiElements();
         findAllViewsByIds();
+
+        RestClient client = new RestClient();
+        Callback<ArrayList<User>> callback = new Callback<ArrayList<User>>() {
+            @Override
+            public void success(ArrayList<User> data,Response response) {
+                //handle data
+                fillAvatars(data);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                //handle error
+            }
+        };
+        client.getApiService().getUserList(callback);
+        fillUiElements();
     }
 
     private void fillUiElements() {
@@ -82,13 +124,14 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
         mScrollView.setScrollViewCallbacks(this);
         mTitleView = (TextView) findViewById(R.id.title);
-        mTitleView.setText(name);
+        mTitleView.setText(restaurant.getName());
+        Picasso.with(RestaurantActivity.this).load(restaurant.getImage()).into((ImageView)mImageView);
         setTitle(null);
         mFab = findViewById(R.id.fab);
         setColorFab();
         mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
-        ViewHelper.setScaleX(mFab, 0);
-        ViewHelper.setScaleY(mFab, 0);
+        ViewHelper.setScaleX(mFab, 1);
+        ViewHelper.setScaleY(mFab, 1);
 
         ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
             @Override
@@ -98,11 +141,54 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         });
     }
 
+    private void fillAvatars(ArrayList<User> users) {
+
+        Picasso.with(getApplicationContext()).load(users.get(0).getAvatar()).into((ImageView) mAvatar1);
+        Picasso.with(getApplicationContext()).load(users.get(1).getAvatar()).into((ImageView) mAvatar2);
+        Picasso.with(getApplicationContext()).load(users.get(2).getAvatar()).into((ImageView) mAvatar3);
+        Picasso.with(getApplicationContext()).load(users.get(3).getAvatar()).into((ImageView) mAvatar4);
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putSerializable("EXTRA_RESTAURANT", restaurant);
+        super.onSaveInstanceState(outState);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        restaurant = (Restaurant) savedInstanceState.getSerializable("EXTRA_RESTAURANT");
+    }
+
     private void findAllViewsByIds() {
         mCallImageView = (ImageView) findViewById(R.id.callImageView);
-        mWifiImageView = (ImageView) findViewById(R.id.cardImageView);
+        mWifiImageView = (ImageView) findViewById(R.id.wifiImageView);
+        setWifiColor();
         mCardImageView = (ImageView) findViewById(R.id.cardImageView);
         mTimeImageView = (ImageView) findViewById(R.id.timeImageView);
+        setTimeColor();
+
+        mAvatar1 = (ImageView) findViewById(R.id.avatar_1);
+        mAvatar2 = (ImageView) findViewById(R.id.avatar_2);
+        mAvatar3 = (ImageView) findViewById(R.id.avatar_3);
+        mAvatar4 = (ImageView) findViewById(R.id.avatar_4);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.review_list);
+        manager = new LinearLayoutManager(this);
+        mAdapter = new RecyclerViewAdapter(getApplicationContext(), getReviews());
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setLayoutManager(manager);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fillUiElements();
     }
 
     @Override
@@ -158,9 +244,6 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         }
 
         setFabAlpha((int) ViewHelper.getTranslationY(mFab));
-        // Show/hide FAB
-
-            showFab();
 
         if (TOOLBAR_IS_STICKY) {
             // Change alpha of toolbar background
@@ -187,14 +270,6 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
     public void onUpOrCancelMotionEvent(ScrollState scrollState) {
     }
 
-    private void showFab() {
-        if (!mFabIsShown) {
-            ViewPropertyAnimator.animate(mFab).cancel();
-            ViewPropertyAnimator.animate(mFab).scaleX(1).scaleY(1).setDuration(200).start();
-            mFabIsShown = true;
-        }
-    }
-
 
     private void setFabAlpha(int scroll) {
         float opacityRange = (float)1/(314 - 38)*(scroll-38);
@@ -209,6 +284,7 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), MenuActivity.class);
+                    intent.putExtra("Name", restaurant.getName());
                     startActivity(intent);
                 }
             });
@@ -233,4 +309,112 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
 
         ((FloatingActionButton) mFab).setImageDrawable(drawable);
     }
+
+    private void setWifiColor() {
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_signal_wifi_4_bar_grey600_24dp);
+
+        int iColor = Color.parseColor(getResources().getString(R.color.material_light_green_500));
+
+        int red = (iColor & 0xFF0000) / 0xFFFF;
+        int green = (iColor & 0xFF00) / 0xFF;
+        int blue = iColor & 0xFF;
+
+        float[] matrix = { 0, 0, 0, 0, red
+                , 0, 0, 0, 0, green
+                , 0, 0, 0, 0, blue
+                , 0, 0, 0, 1, 0 };
+        ColorFilter colorFilter = new ColorMatrixColorFilter(matrix);
+        drawable.setColorFilter(colorFilter);
+
+        ((ImageView)mWifiImageView).setImageDrawable(drawable);
+    }
+
+    private void setCardColor() {
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_credit_card_grey600_24dp);
+
+        int iColor = Color.parseColor(getResources().getString(R.color.material_light_green_500));
+
+        int red = (iColor & 0xFF0000) / 0xFFFF;
+        int green = (iColor & 0xFF00) / 0xFF;
+        int blue = iColor & 0xFF;
+
+        float[] matrix = { 0, 0, 0, 0, red
+                , 0, 0, 0, 0, green
+                , 0, 0, 0, 0, blue
+                , 0, 0, 0, 1, 0 };
+        ColorFilter colorFilter = new ColorMatrixColorFilter(matrix);
+        drawable.setColorFilter(colorFilter);
+
+        ((ImageView)mCardImageView).setImageDrawable(drawable);
+    }
+
+    private void setTimeColor() {
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_timer_grey600_24dp);
+
+        int iColor = Color.parseColor(getResources().getString(R.color.material_light_green_500));
+
+        int red = (iColor & 0xFF0000) / 0xFFFF;
+        int green = (iColor & 0xFF00) / 0xFF;
+        int blue = iColor & 0xFF;
+
+        float[] matrix = { 0, 0, 0, 0, red
+                , 0, 0, 0, 0, green
+                , 0, 0, 0, 0, blue
+                , 0, 0, 0, 1, 0 };
+        ColorFilter colorFilter = new ColorMatrixColorFilter(matrix);
+        drawable.setColorFilter(colorFilter);
+
+        ((ImageView)mTimeImageView).setImageDrawable(drawable);
+    }
+
+    private static class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+        private Context mContext;
+        private LayoutInflater mInflater;
+        private ArrayList<String> mItems;
+
+        public RecyclerViewAdapter(Context context, ArrayList<String> items) {
+            mContext = context;
+            mInflater = LayoutInflater.from(context);
+            mItems = items;
+        }
+
+        @Override
+        public int getItemCount() {
+            return mItems == null ? 0 : mItems.size();
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ViewHolder(mContext, mInflater.inflate(R.layout.review_item, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder viewHolder, final int position) {
+            viewHolder.mHumanReview.setText(mItems.get(position));
+            viewHolder.fab.setBackgroundColor(mContext.getResources().getColor(R.color.material_orange_500));
+        }
+
+        static class ViewHolder extends RecyclerView.ViewHolder {
+            TextView mHumanReview;
+            FloatingActionButton fab;
+            Context context;
+
+            public ViewHolder(Context context, View view) {
+                super(view);
+                this.context = context;
+                this.mHumanReview = (TextView) view.findViewById(R.id.textReview);
+                this.fab = (FloatingActionButton) view.findViewById(R.id.view);
+            }
+        }
+    }
+
+    private ArrayList<String> getReviews() {
+        ArrayList<String> reviews = new ArrayList<>();
+        reviews.add("Nice restaurant");
+        reviews.add("Reccomend it for everybody");
+        reviews.add("I loved yhat kitchen");
+        reviews.add("Not bad");
+        return reviews;
+    }
+
 }

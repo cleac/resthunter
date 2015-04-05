@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,10 +61,17 @@ public class MainActivity extends SlidingUpBaseActivity<ObservableRecyclerView> 
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        public void onBindViewHolder(ViewHolder viewHolder, final int position) {
             viewHolder.mRestaurantName.setText(mItems.get(position).getName());
             Picasso.with(mContext).load(mItems.get(position).getImage()).into(viewHolder.mRestaurantImage);
-            //mItems.get(position).getImage();
+            viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, RestaurantActivity.class);
+                    intent.putExtra("EXTRA_RESTAURANT", mItems.get(position));
+                    mContext.startActivity(intent);
+                }
+            });
         }
 
         static class ViewHolder extends RecyclerView.ViewHolder {
@@ -76,18 +84,6 @@ public class MainActivity extends SlidingUpBaseActivity<ObservableRecyclerView> 
                 this.context = context;
                 this.mRestaurantName = (TextView) view.findViewById(R.id.restaurant_name);
                 this.mRestaurantImage = (ImageView) view.findViewById(R.id.restaurant_image);
-                view.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        click(1);
-                    }
-                });
-            }
-
-            private void click(int i) {
-                Intent intent = new Intent(context, RestaurantActivity.class);
-                intent.putExtra("Name", "MAFIA");
-                context.startActivity(intent);
             }
         }
     }

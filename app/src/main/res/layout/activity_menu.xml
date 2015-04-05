@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_gravity="top"
-        android:minHeight="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/AppTheme.Toolbar"
+        app:theme="@style/Toolbar"  />
 
     <com.resthunter.ui.SlidingTabLayout
         android:background="?attr/colorPrimary"

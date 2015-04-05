@@ -7,6 +7,7 @@ package com.resthunter.SlidingUpWidget;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.location.Location;
@@ -32,11 +33,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
+import com.resthunter.InteriorActivity;
 import com.resthunter.R;
+import com.resthunter.RestaurantActivity;
 import com.resthunter.rest.RestClient;
 import com.resthunter.rest.model.Place;
 import com.resthunter.rest.model.Restaurant;
@@ -121,8 +125,6 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         mToolbar.setBackgroundColor(Color.TRANSPARENT);
         mToolbar.setTitle("");
 
-        initSearchView();
-
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mIntersectionHeight = getResources().getDimensionPixelSize(R.dimen.intersection_height);
         mHeaderBarHeight = getResources().getDimensionPixelSize(R.dimen.header_bar_height);
@@ -178,29 +180,6 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         getCurrentLocation();
     }
 
-    private void showInputMethod(View view) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.showSoftInput(view, 0);
-        }
-    }
-
-    private void initSearchView() {
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        final SearchView searchView = (SearchView) findViewById(R.id.search_view);
-        searchView.setIconifiedByDefault(false);
-        searchView.setIconified(false);
-        searchView.setOnQueryTextFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    showInputMethod(view.findFocus());
-                }
-            }
-        });
-        SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
-        searchView.setSearchableInfo(searchableInfo);
-    }
 
 
     private void setUpMapIfNeeded() {
@@ -225,6 +204,16 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
         mMap.setMyLocationEnabled(true);
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                int id = Integer.valueOf(marker.getTitle());
+                Intent intent = new Intent(SlidingUpBaseActivity.this, RestaurantActivity.class);
+                intent.putExtra("EXTRA_RESTAURANT", restaurants.get(id - 1));
+                SlidingUpBaseActivity.this.startActivity(intent);
+                return true;
+            }
+        });
     }
 
     private void getCurrentLocation() {
@@ -595,7 +584,10 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
 
                 lmp = new LabeledMapPoint(SlidingUpBaseActivity.this);
                 lmp.setText(String.valueOf(free));
-                mMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng)).icon(BitmapDescriptorFactory.fromBitmap(Utils.loadBitmapFromView(lmp))));
+                mMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(lat, lng))
+                        .icon(BitmapDescriptorFactory.fromBitmap(Utils.loadBitmapFromView(lmp)))
+                        .title(String.valueOf(restaurant.getId())));
             }
         }
     }

@@ -12,9 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.resthunter.R;
+import com.resthunter.rest.RestClient;
+import com.resthunter.rest.model.Dish;
+import com.resthunter.rest.model.User;
 import com.resthunter.ui.FoodAdapter;
 
 import java.util.ArrayList;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 /**
  * Created by denys on 4/5/15.
@@ -36,7 +43,7 @@ public class FragmentFirst extends Fragment {
         View rootView = inflater.inflate(R.layout.main_fragment, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.main_recycler_view);
         list = new ArrayList<>();
-        fillFoodList();
+        setmRecyclerView();
 
         return rootView;
     }
@@ -44,17 +51,33 @@ public class FragmentFirst extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-        manager = new LinearLayoutManager(getActivity());
-        mAdapter = new FoodAdapter(mContext, list);
-        mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    private void fillFoodList() {
-        for(int i = 0; i < 10; i++) {
-            list.add("Food " + i);
-        }
+    private void setmRecyclerView() {
+
+        manager = new LinearLayoutManager(getActivity());
+
+        RestClient client = new RestClient();
+        Callback<ArrayList<Dish>> callback = new Callback<ArrayList<Dish>>() {
+            @Override
+            public void success(ArrayList<Dish> data,Response response) {
+                ArrayList<Dish> dishes = new ArrayList<>();
+                for(int i = 0; i < data.size(); i++) {
+                    if (data.get(i).getCategory() == 5)
+                        dishes.add(data.get(i));
+                }
+                mAdapter = new FoodAdapter(mContext, dishes);
+                mRecyclerView.setAdapter(mAdapter);
+            }
+
+            @Override
+            public void failure(RetrofitError retrofitError) {
+                //handle error
+            }
+        };
+        client.getApiService().getDishList(callback);
     }
+
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="70dp">
+
+    <com.melnykov.fab.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="6dp"
+        android:src="@drawable/ic_people_white_18dp"
+        android:id="@+id/view" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="Test"
+        android:id="@+id/textReview"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/view"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:layout_toEndOf="@+id/view"
+        android:layout_marginLeft="19dp"
+        android:layout_marginStart="19dp" />
+
+</RelativeLayout>

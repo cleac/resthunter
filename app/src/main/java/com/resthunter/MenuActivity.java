@@ -9,6 +9,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.resthunter.fragment.FragmentDeserts;
 import com.resthunter.fragment.FragmentDrinks;
@@ -29,12 +31,14 @@ public class MenuActivity extends ActionBarActivity{
     private ViewPager mPager;
     private String[] mPagerItems = null;
     private ActionBar bar = null;
+    private String name;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
+        name = intent.getStringExtra("Name");
         setUI();
 
     }
@@ -54,6 +58,7 @@ public class MenuActivity extends ActionBarActivity{
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
         }
+        getSupportActionBar().setTitle(name);
     }
 
     private void setViewPager() {
@@ -92,6 +97,20 @@ public class MenuActivity extends ActionBarActivity{
                 }
             });
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+
+        if (menuItem.getItemId() == android.R.id.home) {
+            onBackPressed();
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
 

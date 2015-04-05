@@ -65,7 +65,8 @@
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_main"
-            android:parentActivityName=".RestaurantActivity">
+            android:parentActivityName=".RestaurantActivity"
+            android:theme="@style/AppTheme.Toolbar">
             <intent-filter>
                 <category android:name="android.intent.category.View" />
             </intent-filter>
