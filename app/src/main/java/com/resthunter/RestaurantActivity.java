@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
+import com.resthunter.rest.model.Restaurant;
 
 /**
  * Created by denys on 4/4/15.
@@ -417,4 +418,7 @@ public class RestaurantActivity extends BaseActivity implements ObservableScroll
         return reviews;
     }
 
+    private void openRestaurantLocationOnMap(Restaurant restaurant) {
+
+    }
 }

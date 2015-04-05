@@ -20,10 +20,10 @@ public class Dish {
     @Expose
     private Integer category;
     @Expose
-    private List<Integer> ingredients = new ArrayList<Integer>();
+    private ArrayList<Integer> ingredients = new ArrayList<Integer>();
 
     /**
-     * 
+     *
      * @return
      *     The id
      */
@@ -32,7 +32,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @param id
      *     The id
      */
@@ -41,7 +41,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @return
      *     The name
      */
@@ -50,7 +50,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @param name
      *     The name
      */
@@ -59,7 +59,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @return
      *     The price
      */
@@ -68,7 +68,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @param price
      *     The price
      */
@@ -77,7 +77,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @return
      *     The rate
      */
@@ -86,7 +86,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @param rate
      *     The rate
      */
@@ -95,7 +95,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @return
      *     The image
      */
@@ -104,7 +104,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @param image
      *     The image
      */
@@ -113,7 +113,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @return
      *     The category
      */
@@ -122,7 +122,7 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @param category
      *     The category
      */
@@ -131,20 +131,20 @@ public class Dish {
     }
 
     /**
-     * 
+     *
      * @return
      *     The ingredients
      */
-    public List<Integer> getIngredients() {
+    public ArrayList<Integer> getIngredients() {
         return ingredients;
     }
 
     /**
-     * 
+     *
      * @param ingredients
      *     The ingredients
      */
-    public void setIngredients(List<Integer> ingredients) {
+    public void setIngredients(ArrayList<Integer> ingredients) {
         this.ingredients = ingredients;
     }
 

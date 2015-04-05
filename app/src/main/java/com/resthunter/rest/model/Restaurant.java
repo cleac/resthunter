@@ -8,7 +8,11 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+
+import java.util.ArrayList;
+
 public class Restaurant implements Serializable {
+
 
     @Expose
     private Integer id;
@@ -34,6 +38,7 @@ public class Restaurant implements Serializable {
     private Integer kitchen;
     @Expose
     private ArrayList<Integer> services = new ArrayList<Integer>();
+
 
     /**
      *
